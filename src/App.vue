@@ -5,13 +5,16 @@
         </div>
         <div v-if="isStart" id="content">
             <div class="img-area">
-                <img :src="question[i].img" alt="">
+                <img :src="question[i].img" alt="question-image">
             </div>
             <div class="answer-area">
                 <h3 v-if="!isDone"><span :class="time < 3 ? 'ft-red' : ''">{{ time-1 }}.{{ milliSecond }}</span> 초 남았습니다.</h3>
                 <h3>맞춘 개수: {{ count }}</h3>
-                <input v-if="!isDone" type="text" name="answer" v-model="answer" @keyup.enter="isAnswer()" autocomplete='off' v-focus/>
-                <div v-show="isDone" class="retry-area">
+                <div v-if="!isDone" class="input-area">
+                    <input type="text" name="answer" v-model="answer" @keyup.enter="isAnswer()" autocomplete='off' v-focus/>
+                    <button @click="stop">그만하기</button>
+                </div>
+                <div v-else class="retry-area">
                     <h3 v-if="count < question.length">정답은 {{ question[i].answer }}입니다.</h3>
                     <h3 v-else>퀴즈를 완료하였습니다</h3>
                     <button @click="retry">다시하기</button>
@@ -46,7 +49,7 @@ export default {
                 answer: ['손흥민']},
                 {id: 1,
                 img: 'https://cdn.spotvnews.co.kr/news/photo/202404/672984_1028607_4743.jpg',
-                answer: ['이강인']},
+                answer: ['이강인', '칸진리']},
                 {id: 2,
                 img: 'https://sports.chosun.com/news/html/2024/04/18/2024041801001385500187761.jpg',
                 answer: ['김민재']},
@@ -55,7 +58,22 @@ export default {
                 answer: ['황희찬', '여진구']},
                 {id: 4,
                 img: 'https://mydaily.co.kr/photos/2024/03/27/2024032715440523440_l.jpg',
-                answer: ['홀란드', '축신']},
+                answer: ['홀란드', '축신', '홀란', '엘링홀란', '엘링 홀란']},
+                {id: 5,
+                img: 'https://dimg.donga.com/wps/NEWS/IMAGE/2020/09/05/102800493.2.jpg',
+                answer: ['메시', '신', '고트', 'GOAT']},
+                {id: 6,
+                img: 'https://cdn.interfootball.co.kr/news/photo/202110/546804_464468_2023.jpg',
+                answer: ['음바페', '킬리안 음바페', '킬리언 음바페']},
+                {id: 7,
+                img: 'https://image.imnews.imbc.com/news/2020/sports/article/__icsFiles/afieldfile/2020/09/09/hh2020090968.jpg',
+                answer: ['데브라이너', '데브라위너', '케빈 데브라이너', '케빈데브라이너', '덕배', '김덕배', '케빈 더 브라위너', '더브라위너']},
+                {id: 8,
+                img: 'https://img0.yna.co.kr/photo/etc/epa/2023/04/17/PEP20230417030501009_P4.jpg',
+                answer: ['린가드', '제시린가드', '제시 린가드']},
+                {id: 9,
+                img: 'https://images.chosun.com/resizer/LKhG6JYyD4UiexmcxuniUfaBKws=/616x0/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/TAMEF327BSI2QON5LB566UYSTM.jpg',
+                answer: ['해리케인', '케인', '해리 케인']},
             ],
             answer: '',
             count: 0,
@@ -74,7 +92,7 @@ export default {
         time(newVal) {
             if (newVal == 0) {
                 this.isDone = true;
-                console.log("timeout!")
+                console.log("시간초과!")
             }
         }
     },
@@ -131,6 +149,10 @@ export default {
             this.countDown();
             this.initTime();
             this.question = this.shuffle(this.question);
+        },
+        stop() {
+            this.isDone = true;
+            this.time = 0;
         },
         retry() {
             this.answer = '';
@@ -227,6 +249,12 @@ h2 {
 .answer-area {
     text-align: center;
 }
+.input-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 .answer-area > h3,
 .retry-area > h3 {
     margin: 20px 0;
@@ -240,6 +268,7 @@ button {
     color: #333;
     background-color: #C3E2DD;
     cursor: pointer;
+    margin-top: 20px;
 }
 input[type=text] {
     width: 200px;
